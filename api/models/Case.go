@@ -61,7 +61,7 @@ func (c *Case) SaveCase(db *gorm.DB) (*Case, error) {
   var err error
   err = db.Debug().Model(&Case{}).Create(&c).Error
   if err != nil {
-    return &Post{}, err
+    return &Case{}, err
   }
   if c.ID != 0 {
     err = db.Debug().Model(&User{}).Where("id = ?", c.CreatedByID).Take(&c.CreatedBy).Error
@@ -108,7 +108,7 @@ func (c *Case) FindAllCases(db *gorm.DB) (*[]Case, error) {
       if err != nil {
         return &[]Case{}, err
       }
-      if cases[i].ResponsibleId != 0 {
+      if cases[i].ResponsibleID != 0 {
         err = db.Debug().Model(&User{}).Where("id = ?", cases[i].ResponsibleID).Take(&cases[i].Responsible).Error
         if err != nil {
           return &[]Case{}, err
@@ -119,14 +119,14 @@ func (c *Case) FindAllCases(db *gorm.DB) (*[]Case, error) {
   return &cases, nil
 }
 
-func (c *Case) FindCaseBYID(db *gorm.DB, cid uint64) (*Case, error) {
+func (c *Case) FindCaseByID(db *gorm.DB, cid uint64) (*Case, error) {
   var err error
   err = db.Debug().Model(&Case{}).Where("id = ?", cid).Take(&c).Error
   if err != nil {
     return &Case{}, err
   }
-  if p.ID != 0 {
-    err = db.Debug().Model(&User{}).Where("id = ?" c.CreatedByID).Take(&c.CreatedBy).Error
+  if c.ID != 0 {
+    err = db.Debug().Model(&User{}).Where("id = ?", c.CreatedByID).Take(&c.CreatedBy).Error
     if err != nil {
       return &Case{}, err
     }
@@ -152,7 +152,7 @@ func (c *Case) FindCaseBYID(db *gorm.DB, cid uint64) (*Case, error) {
 func (c *Case) UpdateACase(db *gorm.DB) (*Case, error) {
   var err error
 
-  err = db.Debug().Model(&Case{}).Where("id = ?", c.ID).Updated(Case{Title: c.Title, Content: c.Content, UpdatedAT: time.Now()}).Error
+  err = db.Debug().Model(&Case{}).Where("id = ?", c.ID).Updates(Case{Title: c.Title, Content: c.Content, UpdatedAt: time.Now()}).Error
   if err != nil {
     return &Case{}, err
   }

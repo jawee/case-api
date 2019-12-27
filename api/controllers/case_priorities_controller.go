@@ -63,7 +63,7 @@ func (server *Server) GetCasePriorities(w http.ResponseWriter, r *http.Request) 
 
 func (server *Server) GetCasePriority(w http.ResponseWriter, r *http.Request) {
   vars := mux.Vars(r)
-  cid, err := strconv.ParseUint(vars["id"], 10, 32)
+  cid, err := strconv.ParseUint(vars["id"], 10, 64)
   if err != nil {
     responses.ERROR(w, http.StatusBadRequest, err)
     return
@@ -81,7 +81,7 @@ func (server *Server) GetCasePriority(w http.ResponseWriter, r *http.Request) {
 func (server *Server) UpdateCasePriority(w http.ResponseWriter, r *http.Request) {
   vars := mux.Vars(r)
 
-  cid, err := strconv.ParseUint(vars["id"], 10, 32)
+  cid, err := strconv.ParseUint(vars["id"], 10, 64)
   if err != nil {
     responses.ERROR(w, http.StatusBadRequest, err)
     return
@@ -122,7 +122,7 @@ func (server *Server) UpdateCasePriority(w http.ResponseWriter, r *http.Request)
 
   casePriorityUpdate.ID = c.ID
 
-  casePriorityUpdated, err := caseUpdate.UpdateACasePriority(server.DB)
+  casePriorityUpdated, err := casePriorityUpdate.UpdateACasePriority(server.DB)
 
   if err != nil {
     formattedError := formaterror.FormatError(err.Error())
@@ -135,7 +135,7 @@ func (server *Server) UpdateCasePriority(w http.ResponseWriter, r *http.Request)
 func (server *Server) DeleteCasePriority(w http.ResponseWriter, r *http.Request) {
   vars := mux.Vars(r)
 
-  cid, err := strconv.ParseUint(vars["id"], 10, 32)
+  cid, err := strconv.ParseUint(vars["id"], 10, 64)
   if err != nil {
     responses.ERROR(w, http.StatusBadRequest, err)
     return

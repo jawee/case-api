@@ -43,7 +43,7 @@ var caseStatuses = []models.CaseStatus{
   },
   models.CaseStatus{
     Name: "Closed",
-  }
+  },
 }
 
 func Load(db *gorm.DB) {
@@ -51,7 +51,7 @@ func Load(db *gorm.DB) {
   if err != nil {
     log.Fatalf("Cannot drop table: %v", err)
   }
-  err = db.Debug().AutoMigrate(&models.User{}, &models.Post{}, &models.CasePriority{}, &models.CaseStatus{}).Error
+  err = db.Debug().AutoMigrate(&models.User{}, &models.CasePriority{}, &models.CaseStatus{}).Error
   if err != nil {
     log.Fatalf("cannot migrate table: %v", err)
   }

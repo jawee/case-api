@@ -5,7 +5,7 @@ import "github.com/jawee/case-api/api/middlewares"
 func (s *Server) initializeRoutes() {
 
   // Home route
-  s.Router.HandleFunc("/", middlewares.SetMiddlewareJSON(s.HOME)).Methods("GET")
+  s.Router.HandleFunc("/", middlewares.SetMiddlewareJSON(s.Home)).Methods("GET")
 
   // Login route
   s.Router.HandleFunc("/login", middlewares.SetMiddlewareJSON(s.Login)).Methods("POST")
@@ -27,13 +27,14 @@ func (s *Server) initializeRoutes() {
   // CasePriorities routes
   s.Router.HandleFunc("/case_priorities", middlewares.SetMiddlewareJSON(s.CreateCasePriority)).Methods("POST")
   s.Router.HandleFunc("/case_priorities", middlewares.SetMiddlewareJSON(s.GetCasePriorities)).Methods("GET")
-  s.Router.HandleFunc("/case_priorities/{id}", middlewares.SetMiddlewareJSON(s.GetCasePriority).Methods("GET")
+  s.Router.HandleFunc("/case_priorities/{id}", middlewares.SetMiddlewareJSON(s.GetCasePriority)).Methods("GET")
   s.Router.HandleFunc("/case_priorities/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdateCasePriority))).Methods("PUT")
   s.Router.HandleFunc("/case_priorities/{id}", middlewares.SetMiddlewareAuthentication(s.DeleteCasePriority)).Methods("DELETE")
 
   // CaseStatuses routes
   s.Router.HandleFunc("/case_statuses", middlewares.SetMiddlewareJSON(s.CreateCaseStatus)).Methods("POST")
   s.Router.HandleFunc("/case_statuses", middlewares.SetMiddlewareJSON(s.GetCaseStatuses)).Methods("GET")
-  s.Router.HandleFunc("/case_statuses/{id}", middlewares.SetMiddlewareJSON(s.GetCaseStatus).Methods("GET")
+  s.Router.HandleFunc("/case_statuses/{id}", middlewares.SetMiddlewareJSON(s.GetCaseStatus)).Methods("GET")
   s.Router.HandleFunc("/case_statuses/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdateCaseStatus))).Methods("PUT")
   s.Router.HandleFunc("/case_statuses/{id}", middlewares.SetMiddlewareAuthentication(s.DeleteCaseStatus)).Methods("DELETE")
+}

@@ -9,7 +9,7 @@ import (
 
   "github.com/badoux/checkmail"
   "github.com/jinzhu/gorm"
-  "golang.org/x/crypto/bcypt"
+  "golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
@@ -26,7 +26,7 @@ func Hash(password string) ([]byte, error) {
 }
 
 func VerifyPassword(hashedPassword, password string) error {
-  return bcrypt.CompareHashAndPassword([]byte(hashedPassword, []byte(password))
+  return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }
 
 func (u *User) BeforeSave() error {
@@ -41,7 +41,7 @@ func (u *User) BeforeSave() error {
 
 func (u *User) Prepare() {
   u.ID = 0
-  u.Username = html.EscapeString(strings.TrimSpace(u.Nickname))
+  u.Username = html.EscapeString(strings.TrimSpace(u.Username))
   u.Email = html.EscapeString(strings.TrimSpace(u.Email))
   u.CreatedAt = time.Now()
   u.UpdatedAt = time.Now()
@@ -108,7 +108,7 @@ func (u *User) SaveUser(db *gorm.DB) (*User, error) {
 func (u *User) FindAllUsers(db *gorm.DB) (*[]User, error) {
   var err error
   users := []User{}
-  err = db.Debug.Model(&User{}).Limit(100).Find(&users).Error
+  err = db.Debug().Model(&User{}).Limit(100).Find(&users).Error
   if err != nil {
     return &[]User{}, err
   }
@@ -121,7 +121,7 @@ func (u *User) FindUserByID(db *gorm.DB, uid uint32) (*User, error) {
   if err != nil {
     return &User{}, err
   }
-  if gorm.IsRecordNotFound(err) {
+  if gorm.IsRecordNotFoundError(err) {
     return &User{}, errors.New("User Not Found")
   }
   return u, err

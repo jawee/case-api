@@ -52,7 +52,7 @@ func (server *Server) GetUsers(w http.ResponseWriter, r *http.Request) {
     responses.ERROR(w, http.StatusInternalServerError, err)
     return
   }
-  responses.JSON(W, http.StatusOK, users)
+  responses.JSON(w, http.StatusOK, users)
 }
 
 func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {

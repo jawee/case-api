@@ -10,7 +10,7 @@ import (
 )
 
 type CasePriority struct {
-  ID uint32 `gorm:"primary_key;auto_increment" json:"id"`
+  ID uint64 `gorm:"primary_key;auto_increment" json:"id"`
   Name string `gorm:"size:255;not null; unique" json:"name"`
   CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
   UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
@@ -18,7 +18,7 @@ type CasePriority struct {
 
 func (c *CasePriority) Prepare() {
   c.ID = 0
-  c.Name = html.EscapeString(strings.TrimSpace(c.name)
+  c.Name = html.EscapeString(strings.TrimSpace(c.Name))
   c.CreatedAt = time.Now()
   c.UpdatedAt = time.Now()
 }
@@ -49,7 +49,7 @@ func (c *CasePriority) FindAllCasePriorities(db *gorm.DB) (*[]CasePriority, erro
   return &casePriorities, nil
 }
 
-func (c *CasePriority) FindCasePriorityByID(db *gorm.DB, cid uint32) (*CasePriority, error) {
+func (c *CasePriority) FindCasePriorityByID(db *gorm.DB, cid uint64) (*CasePriority, error) {
   var err error
   err = db.Debug().Model(&CasePriority{}).Where("id = ?", cid).Take(&c).Error
   if err != nil {
@@ -61,14 +61,14 @@ func (c *CasePriority) FindCasePriorityByID(db *gorm.DB, cid uint32) (*CasePrior
 func (c *CasePriority) UpdateACasePriority(db *gorm.DB) (*CasePriority, error) {
   var err error
 
-  err = db.Debug().Model(&CasePriority{}).Where("id = ?", c.ID)Updates(CasePriority{Name: c.Name, UpdatedAt: time.Now()}).Error
+  err = db.Debug().Model(&CasePriority{}).Where("id = ?", c.ID).Updates(CasePriority{Name: c.Name, UpdatedAt: time.Now()}).Error
   if err != nil {
     return &CasePriority{}, err
   }
   return c, nil
 }
 
-func (c *CasePriority) DeleteACasePriority(db *gorm.DB, cid uint32) (int64, error) {
+func (c *CasePriority) DeleteACasePriority(db *gorm.DB, cid uint64) (int64, error) {
 
   db = db.Debug().Model(&CasePriority{}).Where("id = ?", cid).Take(&CasePriority{}).Delete(&CasePriority{})
 

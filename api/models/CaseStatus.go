@@ -10,7 +10,7 @@ import (
 )
 
 type CaseStatus struct {
-  ID uint32 `gorm:"primary_key;auto_increment" json:"id"`
+  ID uint64 `gorm:"primary_key;auto_increment" json:"id"`
   Name string `gorm:"size:255;not null; unique" json:"name"`
   CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
   UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
@@ -18,7 +18,7 @@ type CaseStatus struct {
 
 func (c *CaseStatus) Prepare() {
   c.ID = 0
-  c.Name = html.EscapeString(strings.TrimSpace(c.name)
+  c.Name = html.EscapeString(strings.TrimSpace(c.Name))
   c.CreatedAt = time.Now()
   c.UpdatedAt = time.Now()
 }
@@ -49,7 +49,7 @@ func (c *CaseStatus) FindAllCaseStatuses(db *gorm.DB) (*[]CaseStatus, error) {
   return &caseStatuses, nil
 }
 
-func (c *CaseStatus) FindCaseStatusByID(db *gorm.DB, cid uint32) (*CaseStatus, error) {
+func (c *CaseStatus) FindCaseStatusByID(db *gorm.DB, cid uint64) (*CaseStatus, error) {
   var err error
   err = db.Debug().Model(&CaseStatus{}).Where("id = ?", cid).Take(&c).Error
   if err != nil {
@@ -61,14 +61,14 @@ func (c *CaseStatus) FindCaseStatusByID(db *gorm.DB, cid uint32) (*CaseStatus, e
 func (c *CaseStatus) UpdateACaseStatus(db *gorm.DB) (*CaseStatus, error) {
   var err error
 
-  err = db.Debug().Model(&CaseStatus{}).Where("id = ?", c.ID)Updates(CaseStatus{Name: c.Name, UpdatedAt: time.Now()}).Error
+  err = db.Debug().Model(&CaseStatus{}).Where("id = ?", c.ID).Updates(CaseStatus{Name: c.Name, UpdatedAt: time.Now()}).Error
   if err != nil {
     return &CaseStatus{}, err
   }
   return c, nil
 }
 
-func (c *CaseStatus) DeleteACaseStatus(db *gorm.DB, cid uint32) (int64, error) {
+func (c *CaseStatus) DeleteACaseStatus(db *gorm.DB, cid uint64) (int64, error) {
 
   db = db.Debug().Model(&CaseStatus{}).Where("id = ?", cid).Take(&CaseStatus{}).Delete(&CaseStatus{})
 

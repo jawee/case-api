@@ -40,14 +40,14 @@ func (server *Server) CreateCaseStatus(w http.ResponseWriter, r *http.Request) {
     responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
     return
   }
-  caseStatusCreated, err := c.SaveCasePriority(server.DB)
+  caseStatusCreated, err := c.SaveCaseStatus(server.DB)
   if err != nil {
     formattedError := formaterror.FormatError(err.Error())
     responses.ERROR(w, http.StatusInternalServerError, formattedError)
     return
   }
   w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, caseStatusCreated.ID))
-  responses.JSON(w, http.StatusCreated, casePriorityCreated)
+  responses.JSON(w, http.StatusCreated, caseStatusCreated)
 }
 
 func (server *Server) GetCaseStatuses(w http.ResponseWriter, r *http.Request) {
@@ -63,7 +63,7 @@ func (server *Server) GetCaseStatuses(w http.ResponseWriter, r *http.Request) {
 
 func (server *Server) GetCaseStatus(w http.ResponseWriter, r *http.Request) {
   vars := mux.Vars(r)
-  cid, err := strconv.ParseUint(vars["id"], 10, 32)
+  cid, err := strconv.ParseUint(vars["id"], 10, 64)
   if err != nil {
     responses.ERROR(w, http.StatusBadRequest, err)
     return
@@ -81,7 +81,7 @@ func (server *Server) GetCaseStatus(w http.ResponseWriter, r *http.Request) {
 func (server *Server) UpdateCaseStatus(w http.ResponseWriter, r *http.Request) {
   vars := mux.Vars(r)
 
-  cid, err := strconv.ParseUint(vars["id"], 10, 32)
+  cid, err := strconv.ParseUint(vars["id"], 10, 64)
   if err != nil {
     responses.ERROR(w, http.StatusBadRequest, err)
     return
@@ -122,7 +122,7 @@ func (server *Server) UpdateCaseStatus(w http.ResponseWriter, r *http.Request) {
 
   caseStatusUpdate.ID = c.ID
 
-  caseStatusUpdated, err := caseUpdate.UpdateACaseStatus(server.DB)
+  caseStatusUpdated, err := caseStatusUpdate.UpdateACaseStatus(server.DB)
 
   if err != nil {
     formattedError := formaterror.FormatError(err.Error())
@@ -135,7 +135,7 @@ func (server *Server) UpdateCaseStatus(w http.ResponseWriter, r *http.Request) {
 func (server *Server) DeleteCaseStatus(w http.ResponseWriter, r *http.Request) {
   vars := mux.Vars(r)
 
-  cid, err := strconv.ParseUint(vars["id"], 10, 32)
+  cid, err := strconv.ParseUint(vars["id"], 10, 64)
   if err != nil {
     responses.ERROR(w, http.StatusBadRequest, err)
     return
