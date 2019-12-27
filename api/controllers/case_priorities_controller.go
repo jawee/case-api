@@ -35,7 +35,7 @@ func (server *Server) CreateCasePriority(w http.ResponseWriter, r *http.Request)
     responses.ERROR(w, http.StatusUnprocessableEntity, err)
     return
   }
-  uid, err := auth.ExtractTokenID(r)
+  _, err = auth.ExtractTokenID(r)
   if err != nil {
     responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
     return
@@ -87,9 +87,9 @@ func (server *Server) UpdateCasePriority(w http.ResponseWriter, r *http.Request)
     return
   }
 
-  uid, err := auth.ExtractTokenID(r)
+  _, err = auth.ExtractTokenID(r)
   if err != nil {
-    responses.Error(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+    responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
     return
   }
 
@@ -141,7 +141,7 @@ func (server *Server) DeleteCasePriority(w http.ResponseWriter, r *http.Request)
     return
   }
 
-  uid, err := auth.ExtractTokenID(r)
+  _, err = auth.ExtractTokenID(r)
   if err != nil {
     responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
     return

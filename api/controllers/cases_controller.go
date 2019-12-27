@@ -93,9 +93,9 @@ func (server *Server) UpdateCase(w http.ResponseWriter, r *http.Request) {
   }
 
   //CHeck if the auth token is valid and get the user id from it
-  uid, err := auth.ExtractTokenID(r)
+  _, err = auth.ExtractTokenID(r)
   if err != nil {
-    responses.Error(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+    responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
     return
   }
 
@@ -147,7 +147,7 @@ func (server *Server) DeleteCase(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  uid, err := auth.ExtractTokenID(r)
+  _, err = auth.ExtractTokenID(r)
   if err != nil {
     responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
     return
