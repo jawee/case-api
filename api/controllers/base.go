@@ -47,16 +47,18 @@ func (server *Server) Initialize(DbDriver, DbUser, DbPassword, DbPort, DbHost, D
 
   if DbDriver == "sqlite3" {
     server.DB, err = gorm.Open(DbDriver, DbName)
+    
     if err != nil {
       fmt.Printf("Cannot connect to %s database", DbDriver)
       log.Fatal("This is the error:", err)
     } else {
       fmt.Printf("We are connected to the %s database", DbDriver)
+      server.DB.Exec("PRAGMA foreign_keys = ON")
     }
   }
-
+  fmt.Printf("Trying to AutoMigrate....")
   server.DB.Debug().AutoMigrate(&models.User{}, &models.CasePriority{}, &models.CaseStatus{}, &models.Case{})
-
+  fmt.Printf("AutoMigration completed")
   server.Router = mux.NewRouter()
 
   server.initializeRoutes()

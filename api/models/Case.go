@@ -13,16 +13,16 @@ type Case struct {
   ID uint64 `gorm:"primary_key;auto_increment" json:"id"`
   Title string `gorm:"size:255;not null;" json:"title"`
   Content string `gorm:"type:text;not null;" json:"content"`
-  CreatedBy User `json:"created_by"`
-  CreatedByID uint32 `gorm:"not null" json:"created_by_id"`
+  CreatedBy User `json:"created_by" sql:"type:integer REFERENCES user(id)"`
+  CreatedByID uint32 `gorm:"not null" json:"created_by_id" sql:"type:integer REFERENCES users(id)"`
   Responsible User `json:"responsible"`
   ResponsibleID uint32 `gorm:"" json:"responsible_id"`
   CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
   UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
   Status CaseStatus `json:"status"`
-  StatusID uint32 `gorm:"not null" json:"status_id"`
+  StatusID uint64 `gorm:"not null" json:"status_id" sql:"type:integer REFERENCES case_statuses(id)"`
   Priority CasePriority `json:"priority"`
-  PriorityID uint32 `gorm:"not null" json:"priority_id"`
+  PriorityID uint64 `gorm:"not null" json:"priority_id" sql:"type:integer REFERENCES case_priorities(id)"`
 }
 
 func (c *Case) Prepare() {

@@ -13,3 +13,8 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+
+# Databases
+case-api.db
+case-api-test.db
